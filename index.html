@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="dashboard">
+    <header class="app-header">
+      <h1>Weather Dashboard</h1>
+    </header>
+
+    <!-- UI Layer: Search Form -->
+    <form id="search-form" class="search-form">
+      <input 
+        type="text" 
+        id="city-input" 
+        placeholder="Enter city name..." 
+        required 
+        autocomplete="off"
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- UI Layer: Status / Error Messages -->
+    <div id="status-message" class="status-message hidden"></div>
+
+    <!-- UI Layer: Current Weather Display -->
+    <main id="weather-card" class="weather-card hidden">
+      <div class="location-info">
+        <h2 id="city-name">--</h2>
+        <p id="weather-description">--</p>
+      </div>
+
+      <div class="weather-main">
+        <img id="weather-icon" src="" alt="Weather Icon" class="weather-icon" />
+        <div class="temp-display">
+          <span id="temp-celsius" class="temp-main">--°C</span>
+          <span id="temp-fahrenheit" class="temp-sub">--°F</span>
+        </div>
+      </div>
+
+      <div class="weather-details">
+        <div class="detail-item">
+          <span class="detail-label">Humidity</span>
+          <span id="humidity" class="detail-value">--%</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Wind</span>
+          <span id="wind-speed" class="detail-value">-- m/s</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
