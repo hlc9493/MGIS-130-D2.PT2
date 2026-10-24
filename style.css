@@ -13,68 +13,73 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 0.75rem; /* Slightly tighter padding for mobile edges */
 }
 
-/* App Container - Responsive & Mobile First */
+/* App Container - Optimized for Phone Widths */
 .dashboard {
   width: 100%;
   max-width: 400px;
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-  margin-top: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+  margin-top: 0.5rem;
 }
 
 .app-header h1 {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   text-align: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
   color: #243b53;
 }
 
-/* Search Form */
+/* Search Form - Mobile Touch Friendly */
 .search-form {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .search-form input {
   flex: 1;
-  padding: 0.75rem;
-  font-size: 1rem;
+  padding: 0.8rem;
+  /* 16px minimum prevents iOS Safari from auto-zooming on focus */
+  font-size: 1rem; 
   border: 1px solid #bcccdc;
-  border-radius: 6px;
+  border-radius: 8px;
   outline: none;
+  background-color: #f8fafc;
 }
 
 .search-form input:focus {
   border-color: #334e68;
+  background-color: #ffffff;
 }
 
 .search-form button {
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1.2rem;
   font-size: 1rem;
   background-color: #334e68;
   color: #ffffff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+  /* Ensures comfortable touch target */
+  min-height: 48px; 
 }
 
-.search-form button:hover {
-  background-color: #243b53;
+.search-form button:active {
+  background-color: #102a43;
 }
 
 /* Status / Error Messages */
 .status-message {
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   padding: 0.75rem;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 1rem;
   background-color: #f0f4f8;
   color: #486581;
@@ -90,7 +95,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .location-info {
@@ -98,15 +103,16 @@ body {
 }
 
 .location-info h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #102a43;
+  word-break: break-word;
 }
 
 .location-info p {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #627d98;
   text-transform: capitalize;
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
 }
 
 /* Main Temperature Section */
@@ -114,12 +120,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .weather-icon {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
 }
 
 .temp-display {
@@ -128,16 +134,16 @@ body {
 }
 
 .temp-main {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: bold;
   color: #102a43;
   line-height: 1;
 }
 
 .temp-sub {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #627d98;
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
 }
 
 /* Weather Details Section */
@@ -146,8 +152,8 @@ body {
   width: 100%;
   justify-content: space-around;
   border-top: 1px solid #f0f4f8;
-  padding-top: 1rem;
-  margin-top: 0.5rem;
+  padding-top: 0.8rem;
+  margin-top: 0.2rem;
 }
 
 .detail-item {
@@ -157,17 +163,17 @@ body {
 }
 
 .detail-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #627d98;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .detail-value {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #243b53;
-  margin-top: 0.2rem;
+  margin-top: 0.15rem;
 }
 
 /* Helper Class */
