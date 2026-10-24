@@ -12,24 +12,32 @@ const STORAGE_KEYS = {
 };
 
 /**
- * Loads user settings from localStorage.
+ * Loads user settings safely with a fallback if localStorage is blocked (e.g. file:// protocol).
  * @returns {Object} { name, sensitivity }
  */
 function loadUserSettings() {
-  return {
-    name: localStorage.getItem(STORAGE_KEYS.NAME) || "Friend",
-    sensitivity: localStorage.getItem(STORAGE_KEYS.SENSITIVITY) || "neutral" // 'cold', 'neutral', 'hot'
-  };
+  try {
+    return {
+      name: localStorage.getItem(STORAGE_KEYS.NAME) || "Friend",
+      sensitivity: localStorage.getItem(STORAGE_KEYS.SENSITIVITY) || "neutral" // 'cold', 'neutral', 'hot'
+    };
+  } catch (e) {
+    return { name: "Friend", sensitivity: "neutral" };
+  }
 }
 
 /**
- * Saves user settings to localStorage.
+ * Saves user settings safely to localStorage.
  * @param {string} name 
  * @param {string} sensitivity 
  */
 function saveUserSettings(name, sensitivity) {
-  localStorage.setItem(STORAGE_KEYS.NAME, name);
-  localStorage.setItem(STORAGE_KEYS.SENSITIVITY, sensitivity);
+  try {
+    localStorage.setItem(STORAGE_KEYS.NAME, name);
+    localStorage.setItem(STORAGE_KEYS.SENSITIVITY, sensitivity);
+  } catch (e) {
+    console.warn("Could not save to localStorage:", e);
+  }
 }
 
 /**
