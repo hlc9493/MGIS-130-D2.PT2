@@ -2,24 +2,48 @@
 // 1. DATA LAYER
 // ==========================================
 
-// Replace with your OpenWeather API key
-const API_KEY = "YOUR_API_KEY_HERE";
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+const GEO_URL = "https://geocoding-api.open-meteo.com/v1/search";
+const WEATHER_URL = "https://api.open-meteo.com/v1/forecast";
 
 /**
- * Fetches current weather data for a given city from OpenWeather API.
+ * Step 1: Fetches coordinates for a given city name.
  * @param {string} city 
+ * @returns {Promise<Object>} Latitude, longitude, name, and country
+ */
+async function fetchCoordinates(city) {
+  const response = await fetch(`${GEO_URL}?name=${encodeURIComponent(city)}&count=1`);
+  
+  if (!response.ok) {
+    throw new Error("Failed to connect to location service.");
+  }
+
+  const data = await response.json();
+
+  if (!data.results || data.results.length === 0) {
+    throw new Error("City not found. Please check the spelling.");
+  }
+
+  const location = data.results[0];
+  return {
+    lat: location.latitude,
+    lon: location.longitude,
+    name: location.name,
+    country: location.country || ""
+  };
+}
+
+/**
+ * Step 2: Fetches current weather using coordinates.
+ * @param {number} lat 
+ * @param {number} lon 
  * @returns {Promise<Object>}
  */
-async function fetchWeatherData(city) {
-  const url = `${BASE_URL}?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`;
+async function fetchWeatherByCoords(lat, lon) {
+  const url = `${WEATHER_URL}?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&wind_speed_unit=ms`;
   const response = await fetch(url);
 
   if (!response.ok) {
-    if (response.status === 404) {
-      throw new Error("City not found. Please check the spelling.");
-    }
-    throw new Error("Failed to fetch weather data. Please try again later.");
+    throw new Error("Failed to fetch weather data.");
   }
 
   return await response.json();
@@ -40,31 +64,59 @@ function convertCelsiusToFahrenheit(celsius) {
 }
 
 /**
- * Constructs the OpenWeather icon URL from an icon code.
- * @param {string} iconCode 
- * @returns {string}
+ * Maps OpenWeather-style weather codes (WMO Weather interpretation) to descriptions and icons.
+ * Open-Meteo uses WMO codes. Here is a simplified lookup mapper.
+ * @param {number} code 
+ * @returns {Object} description and icon URL
  */
-function getWeatherIconUrl(iconCode) {
-  return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+function interpretWmoCode(code) {
+  // Simple mapping for demonstration (using standard OpenWeather icon codes as stand-ins)
+  let description = "Clear sky";
+  let iconCode = "01d";
+
+  if (code >= 1 && code <= 3) {
+    description = "Partly cloudy";
+    iconCode = "02d";
+  } else if (code >= 45 && code <= 48) {
+    description = "Foggy";
+    iconCode = "50d";
+  } else if (code >= 51 && code <= 67) {
+    description = "Rain showers";
+    iconCode = "09d";
+  } else if (code >= 71 && code <= 77) {
+    description = "Snow";
+    iconCode = "13d";
+  } else if (code >= 95) {
+    description = "Thunderstorm";
+    iconCode = "11d";
+  }
+
+  return {
+    description,
+    iconUrl: `https://openweathermap.org/img/wn/${iconCode}@2x.png`
+  };
 }
 
 /**
  * Processes raw API response into formatted data ready for the UI.
- * @param {Object} rawData 
+ * @param {Object} locationInfo 
+ * @param {Object} rawWeather 
  * @returns {Object}
  */
-function processWeatherData(rawData) {
-  const tempCelsius = rawData.main.temp;
+function processWeatherData(locationInfo, rawWeather) {
+  const current = rawWeather.current;
+  const tempCelsius = current.temperature_2m;
   const tempFahrenheit = convertCelsiusToFahrenheit(tempCelsius);
+  const weatherDetails = interpretWmoCode(current.weather_code);
 
   return {
-    cityName: `${rawData.name}, ${rawData.sys.country}`,
-    description: rawData.weather[0].description,
-    iconUrl: getWeatherIconUrl(rawData.weather[0].icon),
+    cityName: locationInfo.country ? `${locationInfo.name}, ${locationInfo.country}` : locationInfo.name,
+    description: weatherDetails.description,
+    iconUrl: weatherDetails.iconUrl,
     tempCelsius: `${Math.round(tempCelsius)}°C`,
     tempFahrenheit: `${Math.round(tempFahrenheit)}°F`,
-    humidity: `${rawData.main.humidity}%`,
-    windSpeed: `${rawData.wind.speed} m/s`,
+    humidity: `${current.relative_humidity_2m}%`,
+    windSpeed: `${current.wind_speed_10m} m/s`,
   };
 }
 
@@ -136,16 +188,19 @@ searchForm.addEventListener("submit", async (event) => {
   const city = cityInput.value.trim();
   if (!city) return;
 
-  if (API_KEY === "YOUR_API_KEY_HERE" || !API_KEY) {
-    showStatus("Please set your OpenWeather API key in script.js", true);
-    return;
-  }
-
-  showStatus("Fetching weather data...");
+  showStatus("Searching for location...");
 
   try {
-    const rawData = await fetchWeatherData(city);
-    const formattedData = processWeatherData(rawData);
+    // Step 1: Get latitude and longitude from city name
+    const locationInfo = await fetchCoordinates(city);
+
+    showStatus("Fetching weather data...");
+
+    // Step 2: Get weather data using those coordinates
+    const rawWeather = await fetchWeatherByCoords(locationInfo.lat, locationInfo.lon);
+
+    // Step 3: Process and render
+    const formattedData = processWeatherData(locationInfo, rawWeather);
     renderWeather(formattedData);
   } catch (error) {
     showStatus(error.message, true);
