@@ -10,9 +10,6 @@ const STORAGE_KEYS = {
   SENSITIVITY: "weather_app_sensitivity"
 };
 
-/**
- * Loads user settings safely from localStorage.
- */
 function loadUserSettings() {
   try {
     return {
@@ -24,9 +21,6 @@ function loadUserSettings() {
   }
 }
 
-/**
- * Saves user settings safely to localStorage.
- */
 function saveUserSettings(name, sensitivity) {
   try {
     localStorage.setItem(STORAGE_KEYS.NAME, name);
@@ -36,9 +30,6 @@ function saveUserSettings(name, sensitivity) {
   }
 }
 
-/**
- * Fetches geographic coordinates for a given city.
- */
 async function fetchCoordinates(city) {
   const response = await fetch(`${GEO_URL}?name=${encodeURIComponent(city)}&count=1`);
   
@@ -61,9 +52,6 @@ async function fetchCoordinates(city) {
   };
 }
 
-/**
- * Fetches weather data using coordinates.
- */
 async function fetchWeatherByCoords(lat, lon) {
   const url = `${WEATHER_URL}?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&wind_speed_unit=mph`;
   const response = await fetch(url);
@@ -84,10 +72,6 @@ function convertCelsiusToFahrenheit(celsius) {
   return (celsius * 9) / 5 + 32;
 }
 
-/**
- * Calculates "Feels Like You" temperature based on user profile sensitivity.
- * Cold: -7°F | Hot: +7°F | Neutral: 0°F
- */
 function calculateFeelsLikeYou(baseFahrenheit, sensitivity) {
   if (sensitivity === "cold") {
     return baseFahrenheit - 7;
@@ -101,9 +85,6 @@ function isRainyWeather(code) {
   return (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || (code >= 95);
 }
 
-/**
- * Determines clothing advice based on Feels Like You temperature.
- */
 function getClothingAdvice(feelsLikeTemp) {
   if (feelsLikeTemp >= 80) {
     return "Wear shorts and a light shirt—it's hot!";
@@ -196,6 +177,7 @@ function processWeatherData(locationInfo, rawWeather, userSettings) {
 // ==========================================
 
 const appBody = document.getElementById("app-body");
+const settingsDetails = document.getElementById("settings-details");
 const userGreetingEl = document.getElementById("user-greeting");
 const settingsForm = document.getElementById("settings-form");
 const nameInput = document.getElementById("name-input");
@@ -267,6 +249,9 @@ settingsForm.addEventListener("submit", (event) => {
   saveUserSettings(name, sensitivity);
   updateGreeting();
 
+  // Automatically close preferences accordion on save
+  settingsDetails.open = false;
+
   if (cityInput.value.trim() && !weatherCard.classList.contains("hidden")) {
     searchForm.dispatchEvent(new Event("submit"));
   }
@@ -290,6 +275,7 @@ searchForm.addEventListener("submit", async (event) => {
     const formattedData = processWeatherData(locationInfo, rawWeather, userSettings);
     renderWeather(formattedData);
   } catch (error) {
+    console.error("Weather App Error:", error);
     showStatus(error.message, true);
   }
 });
