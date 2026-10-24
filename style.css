@@ -6,9 +6,9 @@
   border-radius: 0 !important;
 }
 
-/* Force Plus Jakarta Sans globally with !important to override course templates */
+/* Force Syne Creative Font globally with !important to override template defaults */
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: 'Syne', sans-serif !important;
   color: #0f172a;
   display: flex;
   justify-content: center;
@@ -19,9 +19,9 @@ body {
   transition: background 0.8s ease;
 }
 
-/* Ensure inputs, selects, and buttons inherit the forced font */
-input, select, button, textarea {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+/* Ensure all interactive UI elements inherit the creative font */
+input, select, button, textarea, summary, details, label {
+  font-family: 'Syne', sans-serif !important;
 }
 
 /* Dynamic Weather Backgrounds */
@@ -64,11 +64,11 @@ body.weather-snow {
 }
 
 .app-header h1 {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   color: #0369a1;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.75px;
 }
 
 .user-greeting {
@@ -144,7 +144,7 @@ body.weather-snow {
 .search-form {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.5rem; /* adjusted since footer is gone */
+  margin-bottom: 1.25rem;
 }
 
 .search-form input {
@@ -208,7 +208,7 @@ body.weather-snow {
 }
 
 .location-info h2 {
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   color: #0f172a;
   font-weight: 800;
   word-break: break-word;
