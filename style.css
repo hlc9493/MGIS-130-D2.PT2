@@ -3,7 +3,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  border-radius: 0 !important; /* Strict squared edges everywhere */
+  border-radius: 0 !important;
 }
 
 /* Background Gradients for Weather Conditions */
@@ -18,27 +18,22 @@ body {
   transition: background 0.6s ease;
 }
 
-/* Default / Idle Background */
 body.weather-default {
   background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
 }
 
-/* Bright Sky / Clear */
 body.weather-clear {
   background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
 }
 
-/* Gray / Cloudy */
 body.weather-cloudy {
   background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
 }
 
-/* Dark & Moody / Rain or Storms */
 body.weather-rain {
   background: linear-gradient(135deg, #334155 0%, #0f172a 100%);
 }
 
-/* Soft White / Snow */
 body.weather-snow {
   background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
 }
@@ -122,11 +117,6 @@ body.weather-snow {
   outline: none;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #0284c7;
-}
-
 .save-btn {
   padding: 0.7rem;
   background-color: #0284c7;
@@ -152,7 +142,7 @@ body.weather-snow {
 .search-form input {
   flex: 1;
   padding: 0.85rem 1rem;
-  font-size: 1rem; /* Prevent iOS zoom */
+  font-size: 1rem;
   border: 2px solid #bae6fd;
   outline: none;
   background-color: #f0f9ff;
@@ -342,7 +332,6 @@ body.weather-snow {
   letter-spacing: 0.5px;
 }
 
-/* Helper Class */
 .hidden {
   display: none !important;
 }
